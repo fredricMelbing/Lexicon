@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="PersonnelRegister.ConsoleApp/PersonnelRegister.ConsoleApp.csproj" />
+  <Project Path="PersonnelRegister.Core/PersonnelRegister.Core.csproj" />
+  <Project Path="PersonnelRegister.Domain/PersonnelRegister.Domain.csproj" />
+</Solution>
