@@ -4,14 +4,11 @@
 	{
 		static void Main(string[] args)
 		{
-			
+			Menu meny = new Menu();
+			meny.Run();
 		}
 	}
 }
-
-//TODO: 1. User informed, you are in main meny
-//TODO: 2. User can select an option (Cases in while-loop)
-//TODO: 3. User choice "0" == Close Program ?? Default: User informed "Incorrect input"
 
 //TODO: 4. User choice "1" == User can buy Ticket => New Meny and ask user what's your age?
 //TODO: 5. User input age, if age < 20 printout Juvenile price: 80kr or age > 64 printout senior price 90kr else printout standardprice 120kr
