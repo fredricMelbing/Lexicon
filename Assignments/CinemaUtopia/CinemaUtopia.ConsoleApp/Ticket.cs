@@ -7,14 +7,14 @@
 		protected Ticket()
 		{
 			soldTickets.Add(this);
-			PrintPrice();
+			//PrintPrice();
 		}
 		public virtual void PrintPrice()
 		{
-			
+
 		}
 	}
-	internal class JuvenileTicket : Ticket
+	class JuvenileTicket : Ticket
 	{
 		public override int Price { get; } = 80;
 		public override void PrintPrice()
@@ -38,4 +38,12 @@
 			Console.WriteLine($"The price for ticket {this.GetType().Name} is: {this.Price} kr");
 		}
 	}
+	class FreeTicket : Ticket
+	{
+		public override int Price { get; } = 0;
+		public override void PrintPrice()
+		{
+			Console.WriteLine($"The price for ticket {this.GetType().Name} is: {this.Price} kr");
+		}
+	}	
 }
