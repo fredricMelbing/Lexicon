@@ -6,8 +6,7 @@
 		public abstract int Price { get;}
 		protected Ticket()
 		{
-			soldTickets.Add(this);
-			//PrintPrice();
+			soldTickets.Add(this);			
 		}
 		public virtual void PrintPrice()
 		{
