@@ -1,9 +1,8 @@
-﻿using StoreConsole.DemoClasses;
+﻿using StoreConsole.ConsoleApp.PDF;
+using StoreConsole.DemoClasses;
 using StoreConsole.Helpers;
 using StoreConsole.StackAndHeap;
-using System.Collections;
-using System.Runtime.CompilerServices;
-using System.Runtime.Intrinsics.Arm;
+using System.Text;
 
 namespace StoreConsole;
 
@@ -24,7 +23,10 @@ internal class Program
 	static string ReadLine => Console.ReadLine() ?? string.Empty;
 
 	static void Main(string[] args)
-	{
+	{		
+		PDF pdf = new PDF();
+		pdf.Questions();
+
 		SeedProducts();
 		bool running = true;
 		do
@@ -598,7 +600,7 @@ internal class Program
 		// Tips Dictionary:
 		// Låt dictionaryn mappa varje stängande parentes till sin matchande öppnare.
 		// Det gör matchningskontrollen till en enkel uppslagning istället för flera if-satser.
-		
+
 		// Tips Stack:
 		// Stacken håller reda på vilka öppnare du sett men ännu inte stängt.
 		// Tänk på vad LIFO innebär här — varför är det precis rätt egenskap för det här problemet?
@@ -623,7 +625,7 @@ internal class Program
 		}
 		if (stack.Count == 0)
 			return true;
-				
+
 		// Varför är Dictionary + Stack bättre än bara Stack med if/else för matchningen?
 		Console.WriteLine("Dictionary tillåter snabb uppslagning av matchande parenteser, " +
 			"vilket gör koden mer läsbar och underhållbar jämfört med flera if/else-satser.");
@@ -679,22 +681,22 @@ internal class Program
 
 		Console.WriteLine(product1);
 		Console.WriteLine(product2);
-				
+
 		// Varför ändras inte number1 när number2 ändras?
 		Console.WriteLine("För att int är en valuetype, vilket innebär att varje variabel har sin egen plats i minnet.");
-				
+
 		// Varför ändras inte score1.Points när score2.Points ändras?
 		Console.WriteLine("För att struct är en valuetype, vilket innebär att varje variabel har sin egen plats i minnet.");
-				
+
 		// Varför ändras product1.Stock när product2.Stock ändras?
 		Console.WriteLine("För att Product är en reference type, vilket innebär att båda variablerna pekar på samma objekt i minnet.");
-				
+
 		// Är Product en value type eller reference type?
 		Console.WriteLine("Reference type");
-				
+
 		// Vad ligger på heapen i Product-exemplet?
 		Console.WriteLine("Objectet kommer att ligg på heapen.");
-				
+
 		// Vad innebär det att två variabler kan peka på samma objekt?
 		Console.WriteLine("Det innebär att båda variablerna hänvisar till samma minnesplats där objektet är lagrat.");
 
@@ -733,17 +735,16 @@ internal class Program
 
 		Console.WriteLine();
 		Console.WriteLine($"RecursiveOdd({n}) = {RecursiveOdd(n)}");
-
-		// TODO: 21. Implementera RecursiveOdd så att den returnerar det n:te udda talet.
+				
 		// När du har implementerat metoderna nedan kan du avkommentera raderna.
 
-		// Console.WriteLine($"RecursiveEven({n}) = {RecursiveEven(n)}");
-		// Console.WriteLine($"IterativeEven({n}) = {IterativeEven(n)}");
-		// Console.WriteLine($"FactorialRecursive({n}) = {FactorialRecursive(n)}");
-		// Console.WriteLine($"SumRecursive({n}) = {SumRecursive(n)}");
-		// Console.WriteLine($"SumIterative({n}) = {SumIterative(n)}");
-		// Console.WriteLine($"FibonacciRecursive({n}) = {FibonacciRecursive(n)}");
-		// Console.WriteLine($"FibonacciIterative({n}) = {FibonacciIterative(n)}");
+		Console.WriteLine($"RecursiveEven({n}) = {RecursiveEven(n)}");
+		Console.WriteLine($"IterativeEven({n}) = {IterativeEven(n)}");
+		Console.WriteLine($"FactorialRecursive({n}) = {FactorialRecursive(n)}");
+		Console.WriteLine($"SumRecursive({n}) = {SumRecursive(n)}");
+		Console.WriteLine($"SumIterative({n}) = {SumIterative(n)}");
+		Console.WriteLine($"FibonacciRecursive({n}) = {FibonacciRecursive(n)}");
+		Console.WriteLine($"FibonacciIterative({n}) = {FibonacciIterative(n)}");
 
 		Console.WriteLine();
 		Console.WriteLine("Trace av rekursion:");
@@ -753,41 +754,35 @@ internal class Program
 		Console.WriteLine("Trace med indrag (visar rekursionsdjup):");
 		RecursiveOddWithDepth(n, 0);
 
-		// TODO: Fråga14.1: Vad är ett basfall?
 		// Vad är ett basfall?
-		Console.WriteLine("Svar 1: TODO - skriv ditt svar här");
+		Console.WriteLine("Basfallet är det stoppvillkor som talar om för funktionen när den ska sluta anropa sig själv och istället börja returnera ett svar.");
 
-		// TODO: Fråga14.2: Varför måste en rekursiv metod ha ett basfall?
 		// Varför måste en rekursiv metod ha ett basfall?
-		Console.WriteLine("Svar 2: TODO - skriv ditt svar här");
+		Console.WriteLine("Utan ett basfall skulle en rekursiv metod anropa sig själv i en oändlig loop.");
 
-		// TODO: Fråga14.3: Vad händer på stacken när en metod anropar sig själv?
 		// Vad händer på stacken när en metod anropar sig själv?
-		Console.WriteLine("Svar 3: TODO - skriv ditt svar här");
+		Console.WriteLine("Varje gång metoden anropas skapas ett nytt minnesutrymme och läggs högst upp på stacken." +
+			" Varje gång metoden anropas så ökar antalet \"lådor\" på stacken.");
 
-		// TODO: Fråga14.4: Vilken version är mest minnesvänlig: rekursion eller iteration? Varför?
 		// Vilken version är mest minnesvänlig: rekursion eller iteration? Varför?
-		Console.WriteLine("Svar 4: TODO - skriv ditt svar här");
+		Console.WriteLine("Iteration är mest minnesvänlig då den skapar upp lokala variabler i minnet som återanvänds. " +
+			"Rekursion skapar om oändligt många gånger i minnet tills minnet är slut eller att basfallet stoppar loopen.");
 	}
-
 	static int RecursiveOdd(int n)
 	{
 		if (n <= 0)
 		{
-			throw new ArgumentException("n måste vara större än 0.");
+			throw new ArgumentException("talet måste vara större än 0.");
 		}
 
 		if (n == 1)
 		{
 			return 1;
 		}
-
 		return RecursiveOdd(n - 1) + 2;
 	}
-
 	static int RecursiveEven(int n)
 	{
-		// TODO: 22. Implementera RecursiveEven så att den returnerar det n:te jämna talet.
 		// Om n <= 0, kasta ArgumentException med meddelandet "n måste vara större än 0."
 		// Om n == 1, returnera 2.
 		// Annars returnera RecursiveEven(n - 1) + 2.
@@ -797,12 +792,19 @@ internal class Program
 		// RecursiveEven(2) = 4
 		// RecursiveEven(3) = 6
 
-		return 0;
+		if (n <= 0)
+		{
+			throw new ArgumentException("n måste vara större än 0.");
+		}
+		if (n == 1)
+		{
+			return 2;
+		}
+		return RecursiveEven(n - 1) + 2;
 	}
-
 	static int IterativeEven(int n)
 	{
-		// TODO: 23. Implementera IterativeEven så att den returnerar det n:te jämna talet.
+		// Implementera IterativeEven så att den returnerar det n:te jämna talet.
 		// Om n <= 0, kasta ArgumentException.
 		// Använd en for-loop för att räkna fram det n:te jämna talet.
 		//
@@ -811,12 +813,17 @@ internal class Program
 		// IterativeEven(2) = 4
 		// IterativeEven(3) = 6
 
-		return 0;
-	}
+		if (n <= 0)
+			throw new ArgumentException("talet måste vara större än 0.");
 
+		int counter = 0;
+		for (int i = 1; i <= n; i++)
+			counter += 2;
+
+		return counter;
+	}
 	static int FactorialRecursive(int n)
 	{
-		// TODO: 24. Implementera FactorialRecursive så att den returnerar n!.
 		// Fakultet:
 		// 5! = 5 * 4 * 3 * 2 * 1 = 120
 		//
@@ -824,32 +831,39 @@ internal class Program
 		// Om n == 0 eller n == 1, returnera 1.
 		// Annars returnera n * FactorialRecursive(n - 1).
 
-		return 0;
+		if (n < 0)
+			throw new ArgumentException("talet måste vara större än eller lika med 0.");
+		if (n == 0 || n == 1)
+			return 1;
+		return n * FactorialRecursive(n - 1);
 	}
-
 	static int SumRecursive(int n)
 	{
-		// TODO: 25. Implementera SumRecursive så att den returnerar summan av de n första heltalen.
 		// Summera alla tal från 1 till n med rekursion.
 		//
 		// SumRecursive(5)
 		// = 5 + 4 + 3 + 2 + 1
 		// = 15
 
-		return 0;
-	}
+		if (n <= 0)
+			throw new ArgumentException("talet måste vara större än 0.");
+		if (n == 1)
+			return 1;
 
+		return n + SumRecursive(n - 1);
+	}
 	static int SumIterative(int n)
 	{
-		// TODO: 26. Implementera SumIterative så att den returnerar summan av de n första heltalen.
 		// Summera alla tal från 1 till n med en loop.
-
-		return 0;
+		int sum = 0;
+		for (int i = 1; i <= n; i++)
+		{
+			sum += i;
+		}
+		return sum;
 	}
-
 	static int FibonacciRecursive(int n)
 	{
-		// TODO: 27. Implementera FibonacciRecursive så att den returnerar det n:te Fibonacci-talet.
 		// Fibonacci:
 		// 0, 1, 1, 2, 3, 5, 8, 13 ...
 		//
@@ -858,48 +872,80 @@ internal class Program
 		// Om n == 1, returnera 1.
 		// Annars returnera FibonacciRecursive(n - 1) + FibonacciRecursive(n - 2).
 
-		return 0;
-	}
+		if (n < 0)
+			throw new ArgumentException("talet måste vara större än eller lika med 0.");
+		if (n == 0) return 0;
+		if (n == 1) return 1;
 
+		return FibonacciRecursive(n - 1) + FibonacciRecursive(n - 2);
+	}
 	static int FibonacciIterative(int n)
 	{
-		// TODO: 28. Implementera FibonacciIterative så att den returnerar det n:te Fibonacci-talet.
 		// Implementera Fibonacci med loop.
 		// Denna version ska vara mer minnesvänlig än den rekursiva.
 
-		return 0;
-	}
+		if (n < 0)
+			throw new ArgumentException("talet måste vara större än eller lika med 0.");
+		if (n == 0) return 0;
+		if (n == 1) return 1;
 
+		int firstValue = 0;
+		int secondValue = 1;
+		int result = 0;
+
+		for (int i = 2; i <= n; i++)
+		{
+			result = firstValue + secondValue;
+			firstValue = secondValue;
+			secondValue = result;
+		}
+		return result;
+	}
 	static int RecursiveOddWithTrace(int n)
 	{
 		Console.WriteLine($"Anropar RecursiveOddWithTrace({n})");
+		logMessages.Add($"Anropar RecursiveOddWithTrace({n})");
 
 		if (n == 1)
 		{
 			Console.WriteLine("Basfall nått. Returnerar 1.");
+			logMessages.Add("Basfall nått. Returnerar 1.");
 			return 1;
 		}
 
 		int result = RecursiveOddWithTrace(n - 1) + 2;
 
 		Console.WriteLine($"RecursiveOddWithTrace({n}) returnerar {result}");
+		logMessages.Add($"RecursiveOddWithTrace({n}) returnerar {result}");			
 
 		return result;
 	}
-
 	static int RecursiveOddWithDepth(int n, int depth)
 	{
 		string indentation = new string(' ', depth * 2);
 
 		Console.WriteLine($"{indentation}RecursiveOddWithDepth({n})");
 
-		// TODO: 29. Implementera RecursiveOddWithDepth så att den fungerar
 		// Lägg till basfall: om n == 1, skriv ut med indrag att basfallet nåtts och returnera 1.
 		// Annars: anropa RecursiveOddWithDepth(n - 1, depth + 1) rekursivt.
 		// Spara resultatet, skriv ut med indrag vad metoden returnerar, och returnera resultatet.
 		// Jämför utskriften med RecursiveOddWithTrace — vad tillför indraget?
 
-		return 0;
+		// Indragen visar varje gång metoden anropas så ökar stacken och varje gång den returnerar så minskar stacken.
+		// Det gör det lättare att se hur många gånger metoden anropas och när den börjar returnera.
+		// Det visar också tydligt när basfallet nås och när metoden börjar returnera värden.			
+
+		if (n == 1)
+		{
+			Console.WriteLine($"{indentation}Basfall nått. Returnerar 1.");			
+			return 1;
+		}
+		else
+		{
+			int result = RecursiveOddWithDepth(n - 1, depth + 1) + 2;
+			Console.WriteLine($"{indentation}RecursiveOddWithDepth({n}) returnerar {result}");			
+			return result;
+		}
 	}
 
 	// ============================================================
@@ -907,18 +953,37 @@ internal class Program
 	// ============================================================
 
 	static void SaveLogToFile()
-	{
-		// TODO: 30. Spara loggutskriften från RecursiveOddWithTrace till en textfil.
+	{		
 		// Kontrollera om logMessages är tom — skriv meddelande om den är det.
 		// Annars: spara alla loggmeddelanden till en fil som heter "logg.txt".
 		// Skriv ut hur många rader som sparades och var filen finns.
 		//
 		// Tips:
 		// File.WriteAllLines("logg.txt", logMessages);
-		// Console.WriteLine($"Sparade {logMessages.Count} rader till logg.txt");
+		Console.WriteLine($"Sparade {logMessages.Count} rader till logg.txt");
 
-		Console.WriteLine("TODO: Implementera SaveLogToFile.");
+		if (logMessages.Count == 0 || logMessages == null)
+			Console.WriteLine("Inga loggmeddelanden att spara.");
+		else
+		{
+			try
+			{
+				string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\logg.txt");
+
+				//IF FILE DOES NOT EXIST, CREATE FILE
+				if (!File.Exists(path))
+					File.WriteAllLines(path, logMessages, Encoding.UTF8);
+				else
+				{
+					//OVERWRITE FILE IF EXISTS
+					File.WriteAllLines(path, logMessages, Encoding.UTF8);
+				}				
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"Error: {ex.Message}");
+			}
+		}
 	}
-
 	#endregion
 }
