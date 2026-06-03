@@ -1,29 +1,32 @@
 ﻿namespace SmartHome.ConsoleApp.Entities
 {
-	internal class Oven
-	{
-		public string Brand { get; }
+	internal class Oven : Appliance
+	{		
 		public uint MaxTemperature { get; }
-		public float KWh { get; }
 
-		public Oven(string brand, uint maxTemperature, float kWh)
+		public Oven(string brand, string room, bool isOn, uint maxTemperature, double kWh) : base(brand, room, isOn, kWh)
 		{
-			Brand = brand;
 			MaxTemperature = maxTemperature;
-			KWh = kWh;
 		}
 
-		public void StartHeating()
+
+		public override string GetInfo()
 		{
+			return $"{Brand} in {Room}, MaxTemperature: {MaxTemperature}°C";
+		}
+		public override void TurnOn()
+		{
+			IsOn = true;
 			Console.WriteLine($"{Brand} {this.GetType().Name.ToLower()} starts heating.");
 		}
-		public void StopHeating()
+		public override void TurnOff()
 		{
+			IsOn = false;
 			Console.WriteLine($"{Brand} {this.GetType().Name.ToLower()} stops heating.");
 		}
-		public void PrintHeatingEnergy()
-		{			
-			Console.WriteLine($"{Brand} {this.GetType().Name.ToLower()} uses {KWh} kWh per hour.");
+		public override double GetDailyEnergyUsage()
+		{
+			return Math.Round(KWh * 0.2, 2);
 		}
 	}
 }

@@ -5,12 +5,14 @@
 		public string Brand { get; }
 		public string Room { get; }
 		public bool IsOn { get; protected set; }
+		public double KWh { get; }
 
-		public Appliance(string brand, string room, bool isOn)
+		public Appliance(string brand, string room, bool isOn, double kWh)
 		{
 			Brand = brand;
 			Room = room;
 			IsOn = isOn;
+			KWh = kWh;
 		}
 		public virtual string GetInfo()
 		{

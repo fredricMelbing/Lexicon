@@ -1,29 +1,32 @@
 ﻿namespace SmartHome.ConsoleApp.Entities
 {
-	internal class Washer
-	{
-		public string Brand { get; }
+	internal class Washer: Appliance
+	{		
 		public uint CapacityKg { get; }
-		public float KWh { get; }
+		
 
-		public Washer(string brand, uint capacityKg, float kWh)
-		{
-			Brand = brand;
-			CapacityKg = capacityKg;
-			KWh = kWh;
+		public Washer(string brand, string room, bool isOn, uint capacityKg, double kWh) : base(brand, room, isOn, kWh)
+		{			
+			CapacityKg = capacityKg;			
 		}
 
-		public void StartWash()
+		public override string GetInfo()
 		{
-			Console.WriteLine($"{Brand} {this.GetType().Name.ToLower()} starts washing.");			
+			return $"{Brand} in {Room}, Capacity: {CapacityKg} kg";			
 		}
-		public void StopWash()
+		public override void TurnOn()
 		{
-			Console.WriteLine($"{Brand} {this.GetType().Name.ToLower()} stops washing.");			
+			IsOn = true;
+			Console.WriteLine($"{Brand} {this.GetType().Name.ToLower()} starts a washing program.");
 		}
-		public void PrintWashEnergy()
+		public override void TurnOff()
 		{
-			Console.WriteLine($"{Brand} {this.GetType().Name.ToLower()} uses {KWh} kWh per wash.");			
+			IsOn = false;			
+			Console.WriteLine($"{Brand} {this.GetType().Name.ToLower()} stops a washing program.");
+		}
+		public override double GetDailyEnergyUsage()
+		{			
+			return Math.Round(KWh * 1.5, 2);
 		}
 	}	
 }

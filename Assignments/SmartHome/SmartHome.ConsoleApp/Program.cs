@@ -8,74 +8,32 @@ namespace SmartHome.ConsoleApp
 		{
 			List<object> devices = new List<object>();
 
-			devices.Add(new Washer("LG", 7, 1.2f));
-			devices.Add(new Refrigerator("Samsung", 8, 3.6f));
-			devices.Add(new Oven("Bosch", 600, 2.5f));
-			devices.Add(new RobotVacuum("iRobot", 500, 0.4f));
-			devices.Add(new CoffeeMachine("Nespresso", 10, 0.3f));
+			devices.Add(new Washer("LG", "Laundry room", false, 7, 1.2));
+			devices.Add(new Refrigerator("Samsung", "Kitchen", false, 8, 3.6));
+			devices.Add(new Oven("Bosch", "Living room", false, 600, 2.5));
+			devices.Add(new RobotVacuum("iRobot", "Living room", false, 500, 0.4));
+			devices.Add(new CoffeeMachine("Nespresso", "Kitchen", false, 10, 0.3));
 
 			RunMorningRoutine(devices); 
 			
-			Console.WriteLine(); 
-			
+			Console.WriteLine();
+
 			ReportAllEnergy(devices);
 
 		}
 		static void RunMorningRoutine(List<object> devices)
 		{
-			foreach (object device in devices)
+			foreach (Appliance appliance in devices.OfType<Appliance>())
 			{
-				if (device is Washer washer)
-				{
-					washer.StartWash();
-					washer.StopWash();
-				}
-				else if (device is Refrigerator refrigerator)
-				{
-					refrigerator.StartCooling();
-					refrigerator.StopCooling();
-				}
-				else if (device is Oven oven)
-				{
-					oven.StartHeating();
-					oven.StopHeating();
-				}
-				else if (device is RobotVacuum robotVacuum)
-				{
-					robotVacuum.StartCleaning();
-					robotVacuum.StopCleaning();
-				}
-				else if (device is CoffeeMachine coffeeMachine)
-				{
-					coffeeMachine.StartBrewing();
-					coffeeMachine.StopBrewing();
-				}
+				appliance.TurnOn();
+				appliance.TurnOff();
 			}
 		}
 		static void ReportAllEnergy(List<object> devices)
 		{
-			foreach (object device in devices)
+			foreach (Appliance appliance in devices.OfType<Appliance>())
 			{
-				if (device is Washer washer)
-				{
-					washer.PrintWashEnergy();
-				}
-				else if (device is Refrigerator refrigerator)
-				{
-					refrigerator.PrintCoolingEnergy();
-				}
-				else if (device is Oven oven)
-				{
-					oven.PrintHeatingEnergy();
-				}
-				else if (device is RobotVacuum robotVacuum)
-				{
-					robotVacuum.PrintCleaningEnergy();
-				}
-				else if (device is CoffeeMachine coffeeMachine)
-				{
-					coffeeMachine.PrintBrewingEnergy();
-				}
+				Console.WriteLine($"{appliance.Brand} {appliance.GetType().Name.ToLower()} uses {appliance.GetDailyEnergyUsage()} kWh per cycle.");
 			}
 		}
 	}

@@ -1,29 +1,32 @@
 ﻿namespace SmartHome.ConsoleApp.Entities
 {
-	internal class Refrigerator
+	internal class Refrigerator : Appliance
 	{
-		public string Brand { get; }
 		public int Temperature { get; }
-		public float KWh { get; }
 
-		public Refrigerator(string brand, int temperature, float kWh)
+		public Refrigerator(string brand, string room, bool isOn, int temperature, double kWh) : base(brand, room, isOn, kWh)
 		{
-			Brand = brand;
 			Temperature = temperature;
-			KWh = kWh;
 		}
 
-		public void StartCooling()
+
+		public override string GetInfo()
 		{
+			return $"{Brand} in {Room}, Temperature: {Temperature}°C";
+		}
+		public override void TurnOn()
+		{
+			IsOn = true;
 			Console.WriteLine($"{Brand} {this.GetType().Name.ToLower()} starts cooling.");
 		}
-		public void StopCooling()
+		public override void TurnOff()
 		{
+			IsOn = false;
 			Console.WriteLine($"{Brand} {this.GetType().Name.ToLower()} stops cooling.");
 		}
-		public void PrintCoolingEnergy()
-		{			
-			Console.WriteLine($"{Brand} {this.GetType().Name.ToLower()} uses {KWh} kWh per day.");
+		public override double GetDailyEnergyUsage()
+		{
+			return Math.Round(KWh * 1, 2);			
 		}
 	}
 }
