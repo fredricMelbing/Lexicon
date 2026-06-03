@@ -72,6 +72,27 @@ Arv används för att återanvända kod och skapa en hierarki av klasser, medan 
 I detta exempel används arv för att skapa en gemensam basklass för alla apparater, och interface för att definiera en specifik funktion som vissa apparater kan ha.
 
 
+---------- Del 10 ---------
+
+Vad säger kompilatorn i dina child classes där du använder override när du tar bort virtual från metod TurnOn() i basklassen?
+Kompilatorn kommer att ge ett felmeddelande eftersom du försöker override:a en metod som inte är definierad som virtual i basklassen.
+"'CoffeeMachine.TurnOn()': cannot override inherited member 'Appliance.TurnOn()' because it is not marked virtual, abstract, or override"
+
+När man tar bort override från "public override void TurnOn()" metoden i tex Class Washer.
+Vad händer?
+Programmet körs fortfarande men det kommer att anropa den TurnOn() metod som är definierad i bas-klassen Appliance istället för den som är definierad i Washer-klassen.
+
+Får du en varning?
+Det blir inget Error eftersom det inte är ett syntaxfel att ta bort override, men det kommer att ge en varning 
+om att metoden i Washer inte override:ar någon metod i bas-klassen, vilket kan leda till oväntat beteende.
+"'Washer.TurnOn()' hides inherited member 'Appliance.TurnOn()'. 
+To make the current member override that implementation, add the override keyword. Otherwise add the new keyword."
+
+Vad föreslår C# att du ska använda?
+Förslår att du ska använda override för att tydligt indikera att du avser att override:a en metod i bas-klassen.
+Eller "public new void TurnOn()" för att indikera att du avser att dölja den ärvda metoden.
+
+
 ---------- Del 11 ---------
 
 1. Blir utskriften samma?
