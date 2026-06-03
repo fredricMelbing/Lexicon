@@ -47,11 +47,30 @@ Det blev bättre eftersom vi nu kan använda polymorfism, vilket gör att vi int
 
 ---------- Del 9 ----------
 
+Varför kompilerar inte ScheduleAllDevicesWrong()?
+Det kompilerar inte eftersom Schedule() är en metod som är definierad i interfacet ISchedulable,
+men ScheduleAllDevicesWrong() försöker anropa Schedule() på objekt av typen Appliance, som inte har den metoden definierad.
+
 1. Varför kan vi inte anropa Schedule() direkt på en variabel av typen Appliance?
+För att Schedule() är en metod som är definierad i interfacet ISchedulable, men inte i bas-klassen Appliance.
+
 2. Varför fungerar det efter att vi castar till ISchedulable?
+När vi castar till ISchedulable, så berättar vi för kompilatorn att det objektet faktiskt implementerar ISchedulable-interfacet, 
+och därmed har tillgång till Schedule()-metoden. Det gör att kompilatorn tillåter oss att anropa Schedule() på det objektet.
+Vi måste dock vara säkra på att objektet verkligen implementerar ISchedulable, annars kommer det att kastas ett undantag vid körning.
+
 3. Vad betyder det att RobotVacuum både är en Appliance och en ISchedulable?
+Det betyder att RobotVacuum ärver från Appliance och implementerar interfacet ISchedulable, 
+vilket gör att den har tillgång till både basklassens metoder och interfacets metoder.
+
 4. Varför ska inte Schedule() ligga direkt i Appliance?
+För att Schedule() är en metod som är specifik för schemalagda enheter, och inte alla apparater behöver vara schemalagda. 
+Genom att ha den i ett interface kan endast de apparater som stöder schemaläggning implementera den.
+
 5. Vad är skillnaden mellan arv och interface i det här exemplet?
+Arv används för att återanvända kod och skapa en hierarki av klasser, medan interface används för att definiera en kontrakt som klasser kan implementera. 
+I detta exempel används arv för att skapa en gemensam basklass för alla apparater, och interface för att definiera en specifik funktion som vissa apparater kan ha.
+
 
 ---------- Del 11 ---------
 

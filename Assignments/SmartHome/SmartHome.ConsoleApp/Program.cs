@@ -17,19 +17,19 @@ namespace SmartHome.ConsoleApp
 			controller.AddDevice(new Dishwasher("Siemens", "Kitchen", false, 12, 1.8));
 
 			controller.PrintStatusReport();
-
 			Console.WriteLine();
 
 			controller.TurnOnAll();
-
 			Console.WriteLine();
 
 			double totalEnergy = controller.GetTotalDailyEnergyUsage();
-			Console.WriteLine($"Total daily energy usage: {totalEnergy} kWh");
-			
+			Console.WriteLine($"Total daily energy usage: {totalEnergy} kWh");			
 			Console.WriteLine();
 			
 			controller.TurnOffAll();
+			Console.WriteLine();
+
+			controller.ScheduleAllSchedulableDevices(DateTime.Now.AddHours(2));
 		}
 	}
 }

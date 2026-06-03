@@ -16,7 +16,7 @@ namespace SmartHome.ConsoleApp.Entities
 		public void Schedule(DateTime time)
 		{
 			NextRun = time;
-			Console.WriteLine($"{base.GetInfo()} scheduled for {time}.");
+			Console.WriteLine($"{Brand} {this.GetType().Name.ToLower()} scheduled for {time}.");
 		}
 		public override string GetInfo()
 		{

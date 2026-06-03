@@ -1,4 +1,5 @@
 ﻿using SmartHome.ConsoleApp.Entities;
+using SmartHome.ConsoleApp.Interfaces;
 
 namespace SmartHome.ConsoleApp.Controllers
 {
@@ -24,6 +25,17 @@ namespace SmartHome.ConsoleApp.Controllers
 		public double GetTotalDailyEnergyUsage()
 		{
 			return Math.Round(_devices.Sum(device => device.GetDailyEnergyUsage()), 2);
+		}
+		public void ScheduleAllSchedulableDevices(DateTime time)
+		{
+			//foreach (ISchedulable device in _devices.OfType<ISchedulable>())
+			//{
+			//	device.Schedule(time);
+			//}
+			if (_devices.OfType<ISchedulable>().Any())
+				_devices.OfType<ISchedulable>().ToList().ForEach(device => device.Schedule(time));
+			else
+				Console.WriteLine("No schedulable devices found.");
 		}
 	}
 }
