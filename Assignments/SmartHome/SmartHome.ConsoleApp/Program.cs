@@ -15,6 +15,14 @@ namespace SmartHome.ConsoleApp
 			controller.AddDevice(new RobotVacuum("iRobot", "Living room", false, 100, 0.4));
 			controller.AddDevice(new CoffeeMachine("Nespresso", "Kitchen", false, 10, 0.3));
 			controller.AddDevice(new Dishwasher("Siemens", "Kitchen", false, 12, 1.8));
+			//controller.AddDevice(new SmartLamp("Philips Hue", "Living room", false, 0.05, 0.1));
+
+			SmartLamp lamp1 = new SmartLamp("IKEA", "Hallway", false, 80, 0.1);
+			Appliance lamp2 = lamp1;
+			lamp1.TurnOn();
+			lamp2.TurnOn();
+
+
 
 			controller.PrintStatusReport();
 			Console.WriteLine();

@@ -96,14 +96,26 @@ Eller "public new void TurnOn()" för att indikera att du avser att dölja den �
 ---------- Del 11 ---------
 
 1. Blir utskriften samma?
-2. Vilken metod körs när variabeln har typen SmartLamp?
-3. Vilken metod körs när variabeln har typen Appliance?
-4. Varför är detta farligt eller förvirrande?
-5. Vad händer om du byter new till override?
+Nej eftersom första objektet lamp1 instansieras som en Smartlamp och andra objektet lamp2 instansieras som en Appliance. 
+"lamp1" kommer att använda "public new void TurnOn()" metoden i Smartlamp-klassen för att new gömmer basklassens metod.
+"lamp2" kommer att använda den TurnOn() metoden som är definierad i bas-klassen Appliance eftersom SmartLampklassen inte override:ar metoden.
+Om man ändrar TurnOn() i Smartlamp-klassen till "public override void TurnOn()" så kommer både lamp1 och lamp2 att använda den override:ade 
+metoden i Smartlamp-klassen, och därmed få samma utskrift.
 
-Skriv en kommentar som förklarar detta med dina egna ord:
-// new gömmer basklassens metod.
-// override ersätter basklassens metod polymorfiskt.
+2. Vilken metod körs när variabeln har typen SmartLamp?
+I detta fallet kommer metoden "public new void TurnOn()" i SmartLamp-klassen att köras, 
+eftersom lamp1 är av typen SmartLamp och new gömmer basklassens metod.
+
+3. Vilken metod körs när variabeln har typen Appliance?
+När variabeln har typen Appliance, så kommer den TurnOn() metoden i bas-klassen Appliance att köras eftersom SmartLampklassen inte override:ar metoden.
+
+4. Varför är detta farligt eller förvirrande?
+Eftersom det kan leda till oväntat beteende när man inte förväntar sig att en metod ska döljas eller override:as. 
+Om man inte är medveten om att en metod är dold eller override:ad kan det leda till förvirring och svåra att felsöka.
+
+5. Vad händer om du byter new till override?
+När man byter "new" till "override" på metoden i SmartLamp-klassen, så kommer både lamp1 och lamp2 att använda den override:ade metoden i SmartLamp-klassen.
+
 
 ---------- Del 12 ---------
 
