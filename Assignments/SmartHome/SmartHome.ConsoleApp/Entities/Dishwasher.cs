@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SmartHome.ConsoleApp.Entities
+﻿namespace SmartHome.ConsoleApp.Entities
 {
 	internal class Dishwasher : Appliance
 	{
@@ -21,12 +17,12 @@ namespace SmartHome.ConsoleApp.Entities
 		public override void TurnOn()
 		{
 			IsOn = true;
-			Console.WriteLine($"{base.GetInfo()} a washing program.");
+			Console.WriteLine($"{base.GetInfo()} In Process of Washing.");
 		}
 		public override void TurnOff()
 		{
 			IsOn = false;
-			Console.WriteLine($"{base.GetInfo()} a washing program.");
+			Console.WriteLine($"{base.GetInfo()} DONE Washing.");
 		}
 		public override double GetDailyEnergyUsage()
 		{

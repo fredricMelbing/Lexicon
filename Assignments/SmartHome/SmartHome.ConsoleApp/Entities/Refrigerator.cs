@@ -17,12 +17,12 @@
 		public override void TurnOn()
 		{
 			IsOn = true;
-			Console.WriteLine($"{base.GetInfo()} cooling.");
+			Console.WriteLine($"{base.GetInfo()} In Process of Cooling.");
 		}
 		public override void TurnOff()
 		{
 			IsOn = false;
-			Console.WriteLine($"{base.GetInfo()} cooling.");
+			Console.WriteLine($"{base.GetInfo()} DONE Cooling.");
 		}
 		public override double GetDailyEnergyUsage()
 		{
