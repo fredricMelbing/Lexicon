@@ -1,4 +1,5 @@
-﻿using SmartHome.ConsoleApp.Entities;
+﻿using SmartHome.ConsoleApp.Controllers;
+using SmartHome.ConsoleApp.Entities;
 
 namespace SmartHome.ConsoleApp
 {
@@ -6,43 +7,28 @@ namespace SmartHome.ConsoleApp
 	{
 		static void Main(string[] args)
 		{
-			List<Appliance> devices = new List<Appliance>();
+			SmartHomeController controller = new SmartHomeController();
+			
+			controller.AddDevice(new Washer("LG", "Laundry room", false, 7, 1.2));
+			controller.AddDevice(new Refrigerator("Samsung", "Kitchen", false, 8, 3.6));
+			controller.AddDevice(new Oven("Bosch", "Living room", false, 600, 2.5));
+			controller.AddDevice(new RobotVacuum("iRobot", "Living room", false, 500, 0.4));
+			controller.AddDevice(new CoffeeMachine("Nespresso", "Kitchen", false, 10, 0.3));
 
-			devices.Add(new Washer("LG", "Laundry room", false, 7, 1.2));
-			devices.Add(new Refrigerator("Samsung", "Kitchen", false, 8, 3.6));
-			devices.Add(new Oven("Bosch", "Living room", false, 600, 2.5));
-			devices.Add(new RobotVacuum("iRobot", "Living room", false, 500, 0.4));
-			devices.Add(new CoffeeMachine("Nespresso", "Kitchen", false, 10, 0.3));
+			controller.PrintStatusReport();
 
-			foreach (Appliance appliance in devices)
-			{
-				Console.WriteLine(appliance.GetInfo());
-				appliance.TurnOn();
-				Console.WriteLine($"{appliance.Brand} {appliance.GetType().Name.ToLower()} uses {appliance.GetDailyEnergyUsage()} kWh per cycle.");
-				appliance.TurnOff();
-			}
+			Console.WriteLine();
 
+			controller.TurnOnAll();
 
-			//How it was done before:
-			//List<object> devicesAsObjects = devices.Cast<object>().ToList();
-			//RunMorningRoutine(devicesAsObjects);			
-			//Console.WriteLine();
-			//ReportAllEnergy(devicesAsObjects);
-		}
-		static void RunMorningRoutine(List<object> devices)
-		{
-			foreach (Appliance appliance in devices.OfType<Appliance>())
-			{
-				appliance.TurnOn();
-				appliance.TurnOff();
-			}
-		}
-		static void ReportAllEnergy(List<object> devices)
-		{
-			foreach (Appliance appliance in devices.OfType<Appliance>())
-			{
-				Console.WriteLine($"{appliance.Brand} {appliance.GetType().Name.ToLower()} uses {appliance.GetDailyEnergyUsage()} kWh per cycle.");
-			}
+			Console.WriteLine();
+
+			double totalEnergy = controller.GetTotalDailyEnergyUsage();
+			Console.WriteLine($"Total daily energy usage: {totalEnergy} kWh");
+			
+			Console.WriteLine();
+			
+			controller.TurnOffAll();
 		}
 	}
 }

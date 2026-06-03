@@ -16,7 +16,7 @@
 		}
 		public virtual string GetInfo()
 		{
-			return $"{Brand} {this.GetType().Name.ToLower()} in {Room}";
+			return $"{Brand} {this.GetType().Name.ToLower()} in {Room} is {(IsOn ? "on" : "off")}";
 		}
 		public virtual void TurnOn()
 		{
