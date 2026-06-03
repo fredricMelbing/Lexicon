@@ -1,6 +1,6 @@
 ﻿namespace SmartHome.ConsoleApp.Entities
 {
-	internal class Appliance
+	internal abstract class Appliance
 	{
 		public string Brand { get; }
 		public string Room { get; }

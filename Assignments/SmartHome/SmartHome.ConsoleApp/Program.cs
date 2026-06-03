@@ -12,8 +12,9 @@ namespace SmartHome.ConsoleApp
 			controller.AddDevice(new Washer("LG", "Laundry room", false, 7, 1.2));
 			controller.AddDevice(new Refrigerator("Samsung", "Kitchen", false, 8, 3.6));
 			controller.AddDevice(new Oven("Bosch", "Living room", false, 600, 2.5));
-			controller.AddDevice(new RobotVacuum("iRobot", "Living room", false, 500, 0.4));
+			controller.AddDevice(new RobotVacuum("iRobot", "Living room", false, 100, 0.4));
 			controller.AddDevice(new CoffeeMachine("Nespresso", "Kitchen", false, 10, 0.3));
+			controller.AddDevice(new Dishwasher("Siemens", "Kitchen", false, 12, 1.8));
 
 			controller.PrintStatusReport();
 
