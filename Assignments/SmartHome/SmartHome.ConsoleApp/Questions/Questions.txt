@@ -1,0 +1,66 @@
+﻿
+---------- Del 1 ----------
+
+1. Varför behövde du kontrollera vilken typ varje objekt hade?
+För att kunna anropa rätt metod för varje enhet. 
+Eftersom varje enhet har olika funktioner (t.ex. StartHeating för ugnen och StartCleaning för robotdammsugaren) 
+behövde jag kontrollera typen av objektet för att veta vilken metod jag skulle anropa.
+
+2. Vad händer om du lägger till en ny klass CoffeeMachine?
+Jag skulle behöva lägga till alla metoder fast de är lika i alla klasser.
+Skulle även behöva lägga till en ny if-sats i RunMorningRoutine och ReportAllEnergy för att hantera CoffeeMachine-objektet, 
+vilket skulle göra koden mer komplex och svår att underhålla.
+
+3. Vilka metoder måste du ändra om du lägger till CoffeeMachine?
+Skulle behöva ändra RunMorningRoutine och ReportAllEnergy (+lägga till CoffeeMachine i listan i Main).
+
+4. Vad är problemet med att listan är List<object>?
+Problem med List<object> är att den inte ger kompilatorn någon information om vilka typer av objekt som finns i listan. 
+Detta kan leda till fel vid körning om man försöker anropa en metod som inte finns på ett objekt av en viss typ.
+
+5. Vad händer om du råkar glömma en apparattyp i ReportAllEnergy()?
+Då skulle den inte rapportera energiförbrukningen för den glömda apparattypen, 
+vilket skulle ge en ofullständig bild av den totala energiförbrukningen i hemmet.
+
+
+---------- Del 2 ----------
+
+*Viktigt fråga*
+När jag lade till CoffeeMachine behövde jag ändra...
+
+---------- Del 5 ----------
+
+1. Varför fungerar device.TurnOn() trots att device har typen Appliance?
+2. Vilken metod körs om objektet egentligen är en RobotVacuum?
+3. Vad blev bättre jämfört med List<object>?
+
+---------- Del 9 ----------
+
+1. Varför kan vi inte anropa Schedule() direkt på en variabel av typen Appliance?
+2. Varför fungerar det efter att vi castar till ISchedulable?
+3. Vad betyder det att RobotVacuum både är en Appliance och en ISchedulable?
+4. Varför ska inte Schedule() ligga direkt i Appliance?
+5. Vad är skillnaden mellan arv och interface i det här exemplet?
+
+---------- Del 11 ---------
+
+1. Blir utskriften samma?
+2. Vilken metod körs när variabeln har typen SmartLamp?
+3. Vilken metod körs när variabeln har typen Appliance?
+4. Varför är detta farligt eller förvirrande?
+5. Vad händer om du byter new till override?
+
+Skriv en kommentar som förklarar detta med dina egna ord:
+// new gömmer basklassens metod.
+// override ersätter basklassens metod polymorfiskt.
+
+---------- Del 12 ---------
+
+1. Vad säger kompilatorn?
+2. Varför får PizzaOven inte override:a TurnOn()?
+3. När kan det vara rimligt att använda sealed override?
+4. Vad kan PizzaOven fortfarande göra i stället? Kan den override:a någon annan metod?
+
+---------- Del 13 ---------
+
+Varför kan listan vara List<ISchedulable> även om objekten egentligen är olika klasser?
