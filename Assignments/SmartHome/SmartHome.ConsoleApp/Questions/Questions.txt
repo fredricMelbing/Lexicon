@@ -27,6 +27,9 @@ vilket skulle ge en ofullständig bild av den totala energiförbrukningen i hemm
 
 *Viktigt fråga*
 När jag lade till CoffeeMachine behövde jag ändra...
+Jag behövde lägga till alla properties, metoder och constructor i objectet, därefter behövde jag lägga till CoffeeMachine i listan i Main.
+Sedan lägga till if-satser i både RunMorningRoutine och ReportAllEnergy för att hantera CoffeeMachine-objektet.
+
 
 ---------- Del 5 ----------
 

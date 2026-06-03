@@ -12,6 +12,7 @@ namespace SmartHome.ConsoleApp
 			devices.Add(new Refrigerator("Samsung", 8, 3.6f));
 			devices.Add(new Oven("Bosch", 600, 2.5f));
 			devices.Add(new RobotVacuum("iRobot", 500, 0.4f));
+			devices.Add(new CoffeeMachine("Nespresso", 10, 0.3f));
 
 			RunMorningRoutine(devices); 
 			
@@ -44,6 +45,11 @@ namespace SmartHome.ConsoleApp
 					robotVacuum.StartCleaning();
 					robotVacuum.StopCleaning();
 				}
+				else if (device is CoffeeMachine coffeeMachine)
+				{
+					coffeeMachine.StartBrewing();
+					coffeeMachine.StopBrewing();
+				}
 			}
 		}
 		static void ReportAllEnergy(List<object> devices)
@@ -65,6 +71,10 @@ namespace SmartHome.ConsoleApp
 				else if (device is RobotVacuum robotVacuum)
 				{
 					robotVacuum.PrintCleaningEnergy();
+				}
+				else if (device is CoffeeMachine coffeeMachine)
+				{
+					coffeeMachine.PrintBrewingEnergy();
 				}
 			}
 		}

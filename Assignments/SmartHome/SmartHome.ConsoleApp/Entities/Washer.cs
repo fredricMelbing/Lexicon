@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SmartHome.ConsoleApp.Entities
+﻿namespace SmartHome.ConsoleApp.Entities
 {
 	internal class Washer
 	{
