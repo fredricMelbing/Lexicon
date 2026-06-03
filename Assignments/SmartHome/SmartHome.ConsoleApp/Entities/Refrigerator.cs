@@ -12,17 +12,17 @@
 
 		public override string GetInfo()
 		{
-			return $"{Brand} in {Room}, Temperature: {Temperature}°C";
+			return $"{base.GetInfo()} Temperature: {Temperature}°C";
 		}
 		public override void TurnOn()
 		{
 			IsOn = true;
-			Console.WriteLine($"{Brand} {this.GetType().Name.ToLower()} starts cooling.");
+			Console.WriteLine($"{base.GetInfo()} cooling.");
 		}
 		public override void TurnOff()
 		{
 			IsOn = false;
-			Console.WriteLine($"{Brand} {this.GetType().Name.ToLower()} stops cooling.");
+			Console.WriteLine($"{base.GetInfo()} cooling.");
 		}
 		public override double GetDailyEnergyUsage()
 		{

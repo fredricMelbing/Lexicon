@@ -34,8 +34,16 @@ Sedan lägga till if-satser i både RunMorningRoutine och ReportAllEnergy för a
 ---------- Del 5 ----------
 
 1. Varför fungerar device.TurnOn() trots att device har typen Appliance?
+För att TurnOn() är en metod som är definierad i bas-klassen Appliance, och alla klasser som ärver från Appliance 
+(som CoffeeMachine, Refrigerator, etc.) har tillgång till den metoden.
+
 2. Vilken metod körs om objektet egentligen är en RobotVacuum?
+Det är metoden TurnOn() som är definierad i RobotVacuum-klassen som kommer att köras, 
+eftersom den override:ar den virtuella metoden TurnOn() i bas-klassen Appliance.
+
 3. Vad blev bättre jämfört med List<object>?
+Det blev bättre eftersom vi nu kan använda polymorfism, vilket gör att vi inte behöver kontrollera typen av varje objekt i listan.
+
 
 ---------- Del 9 ----------
 

@@ -8,26 +8,21 @@
 		{
 			CupsPerBrew = cupsPerBrew;
 		}
-
-		
-		public void PrintBrewingEnergy()
-		{
-			Console.WriteLine($"{Brand} {this.GetType().Name.ToLower()} uses {KWh} kWh per brew.");
-		}
+				
 
 		public override string GetInfo()
 		{
-			return $"{Brand} in {Room}, CupsPerBrew: {CupsPerBrew}";
+			return $"{base.GetInfo()} CupsPerBrew: {CupsPerBrew}";
 		}
 		public override void TurnOn()
 		{
 			IsOn = true;
-			Console.WriteLine($"{Brand} {this.GetType().Name.ToLower()} starts brewing.");
+			Console.WriteLine($"{base.GetInfo()} brewing.");
 		}
 		public override void TurnOff()
-		{
-			IsOn = false;
-			Console.WriteLine($"{Brand} {this.GetType().Name.ToLower()} stops brewing.");
+		{			
+			IsOn = false;			
+			Console.WriteLine($"{base.GetInfo()} brewing.");			
 		}
 		public override double GetDailyEnergyUsage()
 		{

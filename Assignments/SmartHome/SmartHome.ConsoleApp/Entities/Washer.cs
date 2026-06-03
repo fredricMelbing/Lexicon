@@ -12,17 +12,17 @@
 
 		public override string GetInfo()
 		{
-			return $"{Brand} in {Room}, Capacity: {CapacityKg} kg";			
+			return $"{base.GetInfo()} Capacity: {CapacityKg} kg";			
 		}
 		public override void TurnOn()
 		{
 			IsOn = true;
-			Console.WriteLine($"{Brand} {this.GetType().Name.ToLower()} starts a washing program.");
+			Console.WriteLine($"{base.GetInfo()} a washing program.");
 		}
 		public override void TurnOff()
 		{
 			IsOn = false;			
-			Console.WriteLine($"{Brand} {this.GetType().Name.ToLower()} stops a washing program.");
+			Console.WriteLine($"{base.GetInfo()} a washing program.");
 		}
 		public override double GetDailyEnergyUsage()
 		{			

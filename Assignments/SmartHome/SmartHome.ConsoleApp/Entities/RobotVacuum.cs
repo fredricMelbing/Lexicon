@@ -12,17 +12,17 @@
 
 		public override string GetInfo()
 		{
-			return $"{Brand} in {Room}, BatteryLevel: {BatteryLevel}%";
+			return $"{base.GetInfo()} BatteryLevel: {BatteryLevel}%";
 		}
 		public override void TurnOn()
 		{
 			IsOn = true;
-			Console.WriteLine($"{Brand} {this.GetType().Name.ToLower()} starts cleaning.");
+			Console.WriteLine($"{base.GetInfo()} cleaning.");
 		}
 		public override void TurnOff()
 		{
 			IsOn = false;
-			Console.WriteLine($"{Brand} {this.GetType().Name.ToLower()} stops cleaning.");
+			Console.WriteLine($"{base.GetInfo()} cleaning.");
 		}
 		public override double GetDailyEnergyUsage()
 		{

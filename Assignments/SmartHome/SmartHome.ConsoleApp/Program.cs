@@ -6,7 +6,7 @@ namespace SmartHome.ConsoleApp
 	{
 		static void Main(string[] args)
 		{
-			List<object> devices = new List<object>();
+			List<Appliance> devices = new List<Appliance>();
 
 			devices.Add(new Washer("LG", "Laundry room", false, 7, 1.2));
 			devices.Add(new Refrigerator("Samsung", "Kitchen", false, 8, 3.6));
@@ -14,12 +14,20 @@ namespace SmartHome.ConsoleApp
 			devices.Add(new RobotVacuum("iRobot", "Living room", false, 500, 0.4));
 			devices.Add(new CoffeeMachine("Nespresso", "Kitchen", false, 10, 0.3));
 
-			RunMorningRoutine(devices); 
-			
-			Console.WriteLine();
+			foreach (Appliance appliance in devices)
+			{
+				Console.WriteLine(appliance.GetInfo());
+				appliance.TurnOn();
+				Console.WriteLine($"{appliance.Brand} {appliance.GetType().Name.ToLower()} uses {appliance.GetDailyEnergyUsage()} kWh per cycle.");
+				appliance.TurnOff();
+			}
 
-			ReportAllEnergy(devices);
 
+			//How it was done before:
+			//List<object> devicesAsObjects = devices.Cast<object>().ToList();
+			//RunMorningRoutine(devicesAsObjects);			
+			//Console.WriteLine();
+			//ReportAllEnergy(devicesAsObjects);
 		}
 		static void RunMorningRoutine(List<object> devices)
 		{

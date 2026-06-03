@@ -16,17 +16,17 @@
 		}
 		public virtual string GetInfo()
 		{
-			return $"{Brand} in {Room}";
+			return $"{Brand} {this.GetType().Name.ToLower()} in {Room}";
 		}
 		public virtual void TurnOn()
 		{
-			IsOn = true;
-			Console.WriteLine($"{GetInfo()} is now on.");
+			IsOn = true;			
+			Console.WriteLine($"{Brand} {this.GetType().Name.ToLower()} starts");
 		}
 		public virtual void TurnOff()
 		{
-			IsOn = false;
-			Console.WriteLine($"{GetInfo()} is now off.");
+			IsOn = false;			
+			Console.WriteLine($"{Brand} {this.GetType().Name.ToLower()} stops");
 		}
 		public virtual double GetDailyEnergyUsage()
 		{
