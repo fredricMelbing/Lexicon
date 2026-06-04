@@ -119,10 +119,22 @@ När man byter "new" till "override" på metoden i SmartLamp-klassen, så kommer
 
 ---------- Del 12 ---------
 
-1. Vad säger kompilatorn?
+1. Vad säger kompilatorn när man försöker override:a en sealed metod?
+Error - "'PizzaOven.TurnOn()': cannot override inherited member 'Oven.TurnOn()' because it is sealed"
+
 2. Varför får PizzaOven inte override:a TurnOn()?
+För att TurnOn() i Oven-klassen är markerad som sealed, vilket innebär att den inte kan override:as av någon subklass.
+
 3. När kan det vara rimligt att använda sealed override?
+Det kan vara rimligt att använda sealed override när man vill förhindra att en metod override:as av subklasser, 
+till exempel om metoden har en specifik implementation som inte bör ändras.
+Det kan också förbättra prestandan eftersom just-in-time-kompilatorn kan optimera anropet 
+till den sealed-metoden genom att den inte behöver slå upp metoden i någon Virtual method table.
+
 4. Vad kan PizzaOven fortfarande göra i stället? Kan den override:a någon annan metod?
+PizzaOven kan fortfarande override:a andra metoder som inte är markerade som sealed i Oven-klassen, 
+eller lägga till nya metoder som är specifika för PizzaOven-klassen.
+
 
 ---------- Del 13 ---------
 

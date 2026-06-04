@@ -15,7 +15,8 @@ namespace SmartHome.ConsoleApp
 			controller.AddDevice(new RobotVacuum("iRobot", "Living room", false, 100, 0.4));
 			controller.AddDevice(new CoffeeMachine("Nespresso", "Kitchen", false, 10, 0.3));
 			controller.AddDevice(new Dishwasher("Siemens", "Kitchen", false, 12, 1.8));
-			//controller.AddDevice(new SmartLamp("Philips Hue", "Living room", false, 0.05, 0.1));
+			controller.AddDevice(new SmartLamp("Philips Hue", "Living room", false, 0.05, 0.1));
+			controller.AddDevice(new PizzaOven("Gourmet", "Kitchen", false, 750, 2.8));
 
 			SmartLamp lamp1 = new SmartLamp("IKEA", "Hallway", false, 80, 0.1);
 			Appliance lamp2 = lamp1;
