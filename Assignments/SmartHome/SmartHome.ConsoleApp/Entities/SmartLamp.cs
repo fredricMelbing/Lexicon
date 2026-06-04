@@ -10,10 +10,7 @@
 
 		public override void TurnOn()
 		{
-			// TODO:
-			// Skriv ut att lampan tänds.
-			Console.WriteLine($"{this.GetType().Name.ToLower()} is now ON. Brightness: {Brightness}%");
-			//Console.WriteLine($"{base.GetInfo()} is now ON. Brightness: {Brightness}%");
+			Console.WriteLine($"{this.GetType().Name.ToLower()} is now ON. Brightness: {Brightness}%");			
 		}
 	}
 }

@@ -43,11 +43,17 @@ namespace SmartHome.ConsoleApp
 			Console.WriteLine();
 
 			List<ISchedulable> schedulableDevices = controller.GetSchedulableDevices();
-			//foreach (ISchedulable schedulable in schedulableDevices)
-			//{
-			//	Console.WriteLine($"{schedulable.GetType().Name}: {schedulable.NextRun}");
-			//}
 			schedulableDevices.ForEach(device => Console.WriteLine($"{device.GetType().Name}: {device.NextRun}"));
+			Console.WriteLine();			
+			
+			Appliance? foundDevice = controller.FindDeviceByBrand("LG");
+			if (foundDevice != null)
+			{
+				if (foundDevice is ISchedulable schedulableDevice)
+					schedulableDevice.Schedule(DateTime.Now.AddHours(1));
+				else
+					foundDevice.TurnOn();
+			}
 		}
 	}
 }

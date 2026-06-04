@@ -28,10 +28,6 @@ namespace SmartHome.ConsoleApp.Controllers
 		}
 		public void ScheduleAllSchedulableDevices(DateTime time)
 		{
-			//foreach (ISchedulable device in _devices.OfType<ISchedulable>())
-			//{
-			//	device.Schedule(time);
-			//}
 			if (_devices.OfType<ISchedulable>().Any())
 				_devices.OfType<ISchedulable>().ToList().ForEach(device => device.Schedule(time));
 			else
@@ -41,17 +37,22 @@ namespace SmartHome.ConsoleApp.Controllers
 		{
 			List<ISchedulable> result = new List<ISchedulable>();
 			if (_devices.OfType<ISchedulable>().Any())
-			{				
-				//foreach (Appliance device in _devices)
-				//{
-				//	if (device is ISchedulable schedulableDevice)
-				//		result.Add(schedulableDevice);
-				//}
+			{
 				_devices.OfType<ISchedulable>().ToList().ForEach(result.Add);
 			}
 			else
 				Console.WriteLine("No schedulable devices found.");
 			return result;
+		}
+		public Appliance? FindDeviceByBrand(string brand)
+		{
+			var device = _devices.FirstOrDefault(device => device.Brand.Equals(brand, StringComparison.OrdinalIgnoreCase));
+			if (device == null)
+			{
+				Console.WriteLine($"No device found with brand: {brand}");
+				return null;
+			}
+			return device;
 		}
 	}
 }
