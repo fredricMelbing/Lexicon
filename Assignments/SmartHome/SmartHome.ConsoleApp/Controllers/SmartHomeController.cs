@@ -37,5 +37,21 @@ namespace SmartHome.ConsoleApp.Controllers
 			else
 				Console.WriteLine("No schedulable devices found.");
 		}
+		internal List<ISchedulable> GetSchedulableDevices()
+		{
+			List<ISchedulable> result = new List<ISchedulable>();
+			if (_devices.OfType<ISchedulable>().Any())
+			{				
+				//foreach (Appliance device in _devices)
+				//{
+				//	if (device is ISchedulable schedulableDevice)
+				//		result.Add(schedulableDevice);
+				//}
+				_devices.OfType<ISchedulable>().ToList().ForEach(result.Add);
+			}
+			else
+				Console.WriteLine("No schedulable devices found.");
+			return result;
+		}
 	}
 }

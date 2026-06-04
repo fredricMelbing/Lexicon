@@ -1,5 +1,6 @@
 ﻿using SmartHome.ConsoleApp.Controllers;
 using SmartHome.ConsoleApp.Entities;
+using SmartHome.ConsoleApp.Interfaces;
 
 namespace SmartHome.ConsoleApp
 {
@@ -39,6 +40,14 @@ namespace SmartHome.ConsoleApp
 			Console.WriteLine();
 
 			controller.ScheduleAllSchedulableDevices(DateTime.Now.AddHours(2));
+			Console.WriteLine();
+
+			List<ISchedulable> schedulableDevices = controller.GetSchedulableDevices();
+			//foreach (ISchedulable schedulable in schedulableDevices)
+			//{
+			//	Console.WriteLine($"{schedulable.GetType().Name}: {schedulable.NextRun}");
+			//}
+			schedulableDevices.ForEach(device => Console.WriteLine($"{device.GetType().Name}: {device.NextRun}"));
 		}
 	}
 }

@@ -139,3 +139,6 @@ eller lägga till nya metoder som är specifika för PizzaOven-klassen.
 ---------- Del 13 ---------
 
 Varför kan listan vara List<ISchedulable> även om objekten egentligen är olika klasser?
+List<ISchedulable> kan innehålla objekt av olika klasser så länge som alla klasser implementerar interfacet ISchedulable.
+Detta är en av de stora fördelarna med att använda interfaces - det tillåter oss att arbeta med olika typer av objekt på ett enhetligt sätt 
+så länge som de följer samma kontrakt (dvs. implementerar samma interface).
