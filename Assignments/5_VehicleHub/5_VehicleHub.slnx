@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="VehicleHub.ConsoleApp/VehicleHub.ConsoleApp.csproj" />
+  <Project Path="VehicleHub.Tests/VehicleHub.Tests.csproj" Id="e0384301-2b21-4f27-b7ef-9f52e6492520" />
+</Solution>
