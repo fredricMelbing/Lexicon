@@ -153,8 +153,8 @@ namespace VehicleHub.ConsoleApp.UI
 			var constructorArgs = new List<object> { regNum, color, wheels };
 						
 			foreach (var prop in uniqueProperties)
-			{
-				Console.Write($"Ange {prop.Name}: ");
+			{				
+				Console.Write($"Enter {prop.Name}: ");
 				string input = Console.ReadLine() ?? "";
 								
 				try
