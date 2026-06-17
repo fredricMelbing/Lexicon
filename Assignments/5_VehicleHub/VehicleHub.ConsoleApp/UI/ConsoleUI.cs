@@ -41,7 +41,7 @@ namespace VehicleHub.ConsoleApp.UI
 			{
 				{ "1", ListAllVehicles },
 				{ "2", SumAllVehiclesByType },
-				{ "3", ShowParkingMenu },
+				{ "3", ParkVehicle },
 				{ "4", UnparkVehicle },
 				{ "5", SearchVehicle },
 				{ "0", () => Environment.Exit(0) }
@@ -61,7 +61,7 @@ namespace VehicleHub.ConsoleApp.UI
 			MainMenuLoop();
 		}
 		private void InitializeGarage()
-		{			
+		{
 			while (true)
 			{
 				Console.Write("Enter the number of parking spaces the garage should have: ");
@@ -104,11 +104,8 @@ namespace VehicleHub.ConsoleApp.UI
 				}
 			}
 		}
-		private void ShowParkingMenu()
+		private void ParkVehicle()
 		{
-			//TODO: Refactor Create classes to create a new instance of the class based on the type of vehicle the user wants to park with Dictionary.
-			//TODO EXTRA: Refactor more dynamic and use reflection to create instances of the selected vehicle type.
-
 			Console.WriteLine("------ PARKING MENU ------");
 			Console.WriteLine("--- CHOOSE VEHICLE TYPE TO PARK ---");
 
@@ -122,50 +119,69 @@ namespace VehicleHub.ConsoleApp.UI
 				return;
 			}
 
+			Type? vehicleType = typeof(Vehicle).Assembly.GetTypes()
+				.FirstOrDefault(t => t.Name == _parkingTypes[choice]);
+
+			if (vehicleType == null)
+			{				
+				Console.WriteLine("Could not find the selected vehicle type. Returning to main menu.");				
+				return;
+			}
+			CreateVehicleDynamically(vehicleType);
+		}
+		private void CreateVehicleDynamically(Type type)
+		{			
 			Console.Write("Enter registration number: ");
-			string regNum = Console.ReadLine() ?? string.Empty;
+			string regNum = (Console.ReadLine() ?? "").ToUpper();
 
 			if (_handler.FindVehicleByRegNum(regNum) != null)
 			{
-				Console.WriteLine($"Error: A vehicle with registration number {regNum.ToUpper()} is already parked here!");
+				Console.WriteLine($"Not valid: A vehicle with registration number {regNum.ToUpper()} is already parked here!");
 				return;
 			}
 
 			Console.Write("Enter color: ");
-			string color = Console.ReadLine() ?? string.Empty;
+			string color = Console.ReadLine() ?? "";
 
 			Console.Write("Enter number of wheels: ");
 			uint.TryParse(Console.ReadLine(), out uint wheels);
 
-			if (_parkingTypes[choice] == "Car")
+			var uniqueProperties = type.GetProperties()
+				.Where(p => p.DeclaringType == type)
+				.ToList();
+						
+			var constructorArgs = new List<object> { regNum, color, wheels };
+						
+			foreach (var prop in uniqueProperties)
 			{
-				Console.Write("Enter fuel type (e.g., Diesel, Gasoline): ");
-				string fuelType = Console.ReadLine() ?? string.Empty;
-				PrintParkingResult(_handler.ParkVehicle(new Car(regNum, color, wheels, fuelType)));
+				Console.Write($"Ange {prop.Name}: ");
+				string input = Console.ReadLine() ?? "";
+								
+				try
+				{
+					object convertedValue = Convert.ChangeType(input, prop.PropertyType);
+					constructorArgs.Add(convertedValue);
+				}
+				catch
+				{					
+					Console.WriteLine($"Invalid datatype: {prop.Name}. Cancel Process ");					
+					return;
+				}
+				Console.Clear();
 			}
-			else if (_parkingTypes[choice] == "Airplane")
+
+			try
 			{
-				Console.Write("Enter number of engines: ");
-				uint.TryParse(Console.ReadLine(), out uint engines);
-				PrintParkingResult(_handler.ParkVehicle(new Airplane(regNum, color, wheels, engines)));
+				object? newVehicle = Activator.CreateInstance(type, constructorArgs.ToArray());
+
+				if (newVehicle is Vehicle vehicle)
+				{
+					PrintParkingResult(_handler.ParkVehicle(vehicle));
+				}
 			}
-			else if (_parkingTypes[choice] == "Boat")
-			{
-				Console.Write("Enter boat length in feet: ");
-				uint.TryParse(Console.ReadLine(), out uint length);
-				PrintParkingResult(_handler.ParkVehicle(new Boat(regNum, color, wheels, length)));
-			}
-			else if (_parkingTypes[choice] == "Bus")
-			{
-				Console.Write("Enter seating capacity: ");
-				uint.TryParse(Console.ReadLine(), out uint capacity);
-				PrintParkingResult(_handler.ParkVehicle(new Bus(regNum, color, wheels, capacity)));
-			}
-			else if (_parkingTypes[choice] == "Motorcycle")
-			{
-				Console.Write("Enter engine displacement in cc: ");
-				uint.TryParse(Console.ReadLine(), out uint displacement);
-				PrintParkingResult(_handler.ParkVehicle(new Motorcycle(regNum, color, wheels, displacement)));
+			catch
+			{				
+				Console.WriteLine("Something went wrong while creating the vehicle. Please check your inputs and try again.");				
 			}
 		}
 		private void ListAllVehicles()
@@ -189,15 +205,11 @@ namespace VehicleHub.ConsoleApp.UI
 			Console.WriteLine("--- VEHICLE TYPES IN THE GARAGE ---");
 
 			if (!counts.Any())
-			{
 				Console.WriteLine("No vehicles in the garage.");
-			}
 			else
 			{
 				foreach (var kvp in counts)
-				{
 					Console.WriteLine($"{kvp.Key}: {kvp.Value} st");
-				}
 			}
 			Console.WriteLine();
 		}
@@ -208,13 +220,10 @@ namespace VehicleHub.ConsoleApp.UI
 			string regNum = Console.ReadLine() ?? string.Empty;
 
 			if (_handler.RemoveVehicle(regNum))
-			{
 				Console.WriteLine($"Vehicle with registration number {regNum.ToUpper()} has been removed!");
-			}
+
 			else
-			{
 				Console.WriteLine($"No vehicle found with registration number {regNum.ToUpper()} in the garage.");
-			}
 		}
 		private void SearchVehicle()
 		{
@@ -222,8 +231,9 @@ namespace VehicleHub.ConsoleApp.UI
 
 			Console.Write("Do you want to search by Type?: y/n ");
 			string typeInput = string.Empty;
-
-			if (Console.ReadKey().KeyChar == 'y' || Console.ReadKey().KeyChar == 'Y')
+			char typeChoice = Console.ReadKey().KeyChar;
+			
+			if (typeChoice.Equals('y') || typeChoice.Equals('Y'))
 			{
 				Console.WriteLine();
 				foreach (var option in _parkingTypes)
@@ -243,6 +253,11 @@ namespace VehicleHub.ConsoleApp.UI
 					Console.Clear();
 					Console.WriteLine("Invalid choice. Searching with other criteria.");
 				}
+			}
+			else
+			{				
+				Console.Clear();
+				Console.WriteLine("Searching with other criteria.");
 			}
 			Console.Write("Search by color: ");
 			string color = Console.ReadLine() ?? string.Empty;
