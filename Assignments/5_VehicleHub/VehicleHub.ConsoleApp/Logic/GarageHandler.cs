@@ -10,7 +10,7 @@ namespace VehicleHub.ConsoleApp.Logic
 
 
 
-		public void CreateGarage(uint capacity)
+		public void CreateGarage(int capacity)
 		{			
 			_garage = new Garage<Vehicle>(capacity);
 		}
@@ -66,6 +66,12 @@ namespace VehicleHub.ConsoleApp.Logic
 				query = query.Where(v => v.NumberOfWheels == wheels.Value);
 
 			return query.ToList();
+		}
+		public int GetAvailableSpaces()
+		{
+			if (_garage == null) return 0;
+
+			return _garage.Capacity - _garage.Count;
 		}
 	}
 }

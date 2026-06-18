@@ -6,11 +6,11 @@ namespace VehicleHub.ConsoleApp.Storage
 	internal class Garage<T> : IEnumerable<T> where T : IVehicle
 	{
 		private T?[] _vehicles;
-		public uint Capacity { get; }
-		public uint Count { get; private set; }
+		public int Capacity { get; }
+		public int Count => System.Linq.Enumerable.Count(this);
 
 
-		public Garage(uint capacity)
+		public Garage(int capacity)
 		{
 			if (capacity <= 0) throw new ArgumentException("Capacity must be greater than zero.");			
 

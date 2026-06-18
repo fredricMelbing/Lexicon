@@ -16,7 +16,7 @@ namespace VehicleHub.ConsoleApp.UI
 			InitializeMenus();
 		}
 
-		private void GenerateData(uint capacity)
+		private void GenerateData(int capacity)
 		{
 			List<Vehicle> vehicles = new List<Vehicle>
 			{
@@ -63,9 +63,9 @@ namespace VehicleHub.ConsoleApp.UI
 		private void InitializeGarage()
 		{
 			while (true)
-			{
+			{				
 				Console.Write("Enter the number of parking spaces the garage should have: ");
-				if (uint.TryParse(Console.ReadLine(), out uint capacity) && capacity > 0)
+				if (int.TryParse(Console.ReadLine(), out int capacity) && capacity > 0 && capacity <= int.MaxValue)
 				{
 					_handler.CreateGarage(capacity);
 					Console.WriteLine($"A garage with {capacity} spaces has been created!");
@@ -107,7 +107,13 @@ namespace VehicleHub.ConsoleApp.UI
 		private void ParkVehicle()
 		{
 			Console.WriteLine("------ PARKING MENU ------");
-			Console.WriteLine("--- CHOOSE VEHICLE TYPE TO PARK ---");
+			int freeSpaces = _handler.GetAvailableSpaces();
+			if (freeSpaces <= 0)
+			{				
+				Console.WriteLine("Sorry, Garage are full! Going back to Main Menu");				
+				return;
+			}
+			Console.WriteLine($"--- CHOOSE VEHICLE TYPE TO PARK: {freeSpaces} vacant spaces left ---");
 
 			foreach (var option in _parkingTypes)
 				Console.WriteLine($"{option.Key}. {option.Value}");
@@ -132,11 +138,16 @@ namespace VehicleHub.ConsoleApp.UI
 		private void CreateVehicleDynamically(Type type)
 		{			
 			Console.Write("Enter registration number: ");
-			string regNum = (Console.ReadLine() ?? "").ToUpper();
+			string regNum = (Console.ReadLine() ?? string.Empty).ToUpper();
+			if (regNum == string.Empty || regNum == "")
+			{
+				Console.WriteLine($"Not valid: Registration number {regNum}!");
+				return;				
+			}
 
 			if (_handler.FindVehicleByRegNum(regNum) != null)
 			{
-				Console.WriteLine($"Not valid: A vehicle with registration number {regNum.ToUpper()} is already parked here!");
+				Console.WriteLine($"Not valid: A vehicle with registration number {regNum} is already parked here!");
 				return;
 			}
 
@@ -153,7 +164,7 @@ namespace VehicleHub.ConsoleApp.UI
 			var constructorArgs = new List<object> { regNum, color, wheels };
 						
 			foreach (var prop in uniqueProperties)
-			{				
+			{
 				Console.Write($"Enter {prop.Name}: ");
 				string input = Console.ReadLine() ?? "";
 								
@@ -221,7 +232,6 @@ namespace VehicleHub.ConsoleApp.UI
 
 			if (_handler.RemoveVehicle(regNum))
 				Console.WriteLine($"Vehicle with registration number {regNum.ToUpper()} has been removed!");
-
 			else
 				Console.WriteLine($"No vehicle found with registration number {regNum.ToUpper()} in the garage.");
 		}
@@ -230,10 +240,10 @@ namespace VehicleHub.ConsoleApp.UI
 			Console.WriteLine("--- SEARCH VEHICLES BY PROPERTIES (Leave blank to ignore a filter) ---");
 
 			Console.Write("Do you want to search by Type?: y/n ");
-			string typeInput = string.Empty;
-			char typeChoice = Console.ReadKey().KeyChar;
-			
-			if (typeChoice.Equals('y') || typeChoice.Equals('Y'))
+			string typeInput = string.Empty;			
+			string typechoice = Console.ReadKey().KeyChar.ToString() ?? string.Empty;
+						
+			if (typechoice.ToLower().Equals("y"))
 			{
 				Console.WriteLine();
 				foreach (var option in _parkingTypes)

@@ -4,7 +4,8 @@ namespace VehicleHub.ConsoleApp.Interfaces
 {
 	internal interface IGarageHandler
 	{
-		void CreateGarage(uint capacity);
+		int GetAvailableSpaces();
+		void CreateGarage(int capacity);
 		bool ParkVehicle(Vehicle vehicle);
 		bool RemoveVehicle(string regNum);
 		IEnumerable<Vehicle> GetParkedVehicles();
