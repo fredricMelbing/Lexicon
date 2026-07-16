@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="PurrfectFit.Core/PurrfectFit.Core.csproj" />
+  <Project Path="PurrfectFit.Persistence/PurrfectFit.Persistence.csproj" />
+  <Project Path="PurrfectFit.Web/PurrfectFit.Web.csproj" />
+</Solution>
