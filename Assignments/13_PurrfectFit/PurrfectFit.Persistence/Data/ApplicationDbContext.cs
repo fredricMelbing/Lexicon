@@ -11,9 +11,15 @@ namespace PurrfectFit.Persistence.Data
 		{
 		}
 
+		public DbSet<GymClass> GymClasses { get; set; }
+
 		protected override void OnModelCreating(ModelBuilder builder)
 		{			
 			base.OnModelCreating(builder);
+
+			// This single line scans the current assembly for any classes
+			// implementing IEntityTypeConfiguration and applies them automatically!
+			builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 		}
 	}
 }
