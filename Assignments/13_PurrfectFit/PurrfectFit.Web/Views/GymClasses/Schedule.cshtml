@@ -1,0 +1,34 @@
+﻿@model GymClassScheduleViewModel
+
+@{
+    ViewData["Title"] = "Schedule New Gym Class";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">🐾 Schedule a New Gym Class</h2>
+        </div>
+        <div class="card-body">
+            <form asp-action="Schedule" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <!-- DYNAMIC FIELD INJECTION -->                
+                <partial name="_GymClassFormFields" model="Model" />
+
+                <div class="mt-4 border-top pt-3 d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Schedule
+                    </a>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-calendar-plus"></i> Schedule Class
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {    
+    <partial name="_ValidationScriptsPartial" />
+}

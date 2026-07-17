@@ -50,7 +50,7 @@ namespace PurrfectFit.Web
 			app.MapStaticAssets();
 			app.MapControllerRoute(
 				name: "default",
-				pattern: "{controller=Home}/{action=Index}/{id?}")
+				pattern: "{controller=GymClasses}/{action=Index}/{id?}")
 				.WithStaticAssets();
 
 			app.MapRazorPages();

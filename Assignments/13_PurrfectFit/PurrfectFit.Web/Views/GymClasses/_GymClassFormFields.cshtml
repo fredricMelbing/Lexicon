@@ -1,0 +1,98 @@
+﻿@model GymClassBaseViewModel
+
+@foreach (var property in ViewData.ModelMetadata.Properties)
+{
+    // Skip the Id property if it exists in the loop
+    if (property.PropertyName == "Id") continue;
+
+    // Fallback: If DisplayName is missing/null, use the raw C# PropertyName instead
+    var labelText = property.DisplayName ?? property.PropertyName ?? string.Empty;
+
+    // 1. EXTRACT POSTED VALUE: Grabs the data the user typed before the database check failed
+    var postedValue = property.PropertyGetter?.Invoke(Model)?.ToString() ?? string.Empty;
+
+    // 2. EXTRACT SERVER ERROR: Checks if the Controller added a ModelState error for this property
+    var hasServerError = ViewData.ModelState.TryGetValue(property.PropertyName ?? string.Empty, out var modelStateEntry);
+    var serverErrorMessage = hasServerError ? modelStateEntry?.Errors.FirstOrDefault()?.ErrorMessage : string.Empty;
+
+
+    <!-- DYNAMIC VALIDATION EXTRACTOR -->
+    <!-- We read the validation rules from C# metadata to use them in HTML -->
+    var isRequired = property.IsRequired;
+
+    // Look for Range attribute data
+    var rangeAttribute = property.ValidatorMetadata.OfType<System.ComponentModel.DataAnnotations.RangeAttribute>().FirstOrDefault();
+
+    // Look for StringLength attribute data
+    var lengthAttribute = property.ValidatorMetadata.OfType<System.ComponentModel.DataAnnotations.StringLengthAttribute>().FirstOrDefault();
+
+
+    <div class="mb-3">
+        <!-- Safely uses the labelText variable -->
+        <label for="@property.PropertyName" class="form-label fw-bold">
+            @labelText
+        </label>
+
+        <!-- DATETIME HANDLER -->
+        @if (property.ModelType == typeof(DateTime))
+        {
+            // Format DateTime correctly for HTML5 input (yyyy-MM-ddTHH:mm)
+            var dateValue = property.PropertyGetter?.Invoke(Model) as DateTime?;
+            var formattedDate = dateValue?.ToString("yyyy-MM-ddTHH:mm") ?? "";
+
+            var currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? string.Empty;
+            var isCreateView = currentAction == "Schedule";
+
+            var minDate = isCreateView ? DateTime.Now.ToString("yyyy-MM-ddTHH:mm") : string.Empty;
+
+            <input type="datetime-local" name="@property.PropertyName" id="@property.PropertyName" class="form-control"
+                   value="@formattedDate"
+                   min="@minDate"
+                   data-val="@(isRequired ? "true" : "false")"
+                   data-val-required="The @labelText field is required."
+                   data-msg-min="@(isCreateView ? "The start time cannot be in the past." : string.Empty)" />
+        }
+
+        <!-- TIMESPAN HANDLER -->
+        @if (property.ModelType == typeof(TimeSpan))
+        {
+            <input type="time" name="@property.PropertyName" id="@property.PropertyName" class="form-control"
+                   value="@postedValue"
+                   data-val="@(isRequired ? "true" : "false")"
+                   data-val-required="The @labelText field is required." />
+        }
+
+        <!-- DEFAULT TO STANDARD TEXT INPUT -->        
+        @if (property.ModelType.Name == "String")
+        {
+            // Check which attributes are actually present on the property
+            var hasRequired = property.ValidatorMetadata.OfType<System.ComponentModel.DataAnnotations.RequiredAttribute>().Any();
+            var stringLength = property.ValidatorMetadata.OfType<System.ComponentModel.DataAnnotations.StringLengthAttribute>().FirstOrDefault();
+
+            // Trigger client validation only if there are active rules to check
+            var shouldValidate = hasRequired || stringLength != null;
+
+            <input type="text" name="@property.PropertyName" id="@property.PropertyName" class="form-control" placeholder="Enter details..."
+                   value="@postedValue"
+                   data-val="@(shouldValidate ? "true" : "false")"
+            @* 1. Output Required validation ONLY if it exists *@
+            @(hasRequired ? Html.Raw($"data-val-required=\"The {labelText} field is required.\"") : null)
+            @* 2. Output Length validation ONLY if it exists *@
+            @if (stringLength != null)
+            {
+                var msg = stringLength.ErrorMessage ?? $"The {labelText} must be between {stringLength.MinimumLength} and {stringLength.MaximumLength} characters.";
+                msg = msg.Replace("{0}", labelText)
+                         .Replace("{1}", stringLength.MaximumLength.ToString())
+                         .Replace("{2}", stringLength.MinimumLength.ToString());
+                @Html.Raw($"data-val-length=\"{msg}\" data-val-length-min=\"{stringLength.MinimumLength}\" data-val-length-max=\"{stringLength.MaximumLength}\"")
+            }
+            />
+        }
+
+        <span class="text-danger @(hasServerError ? "field-validation-error" : "field-validation-valid")"
+              data-valmsg-for="@property.PropertyName"
+              data-valmsg-replace="true">
+            @serverErrorMessage
+        </span>
+    </div>
+}
