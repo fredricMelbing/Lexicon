@@ -31,6 +31,7 @@ namespace PurrfectFit.Web.Controllers
 		}
 
 		// GET: GymClasses/Details/5
+		[Authorize]
 		public async Task<IActionResult> Details(int? id)
 		{
 			if (id == null)
@@ -52,6 +53,7 @@ namespace PurrfectFit.Web.Controllers
 		}
 
 		// GET: GymClasses/Schedule
+		[Authorize]
 		public IActionResult Schedule()
 		{
 			return View();
@@ -59,6 +61,7 @@ namespace PurrfectFit.Web.Controllers
 
 		// POST: GymClasses/Schedule
 		[HttpPost]
+		[Authorize]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Schedule(GymClassScheduleViewModel model)
 		{
@@ -80,7 +83,8 @@ namespace PurrfectFit.Web.Controllers
 
 			return View(model);
 		}
-		// GET: GymClasses/Edit/5
+		// GET: GymClasses/Reschedule/5
+		[Authorize]
 		public async Task<IActionResult> Reschedule(int? id)
 		{
 			if (id == null) return NotFound();
@@ -100,8 +104,9 @@ namespace PurrfectFit.Web.Controllers
 			return View(model);
 		}
 
-		// POST: GymClasses/Edit/5
+		// POST: GymClasses/Reschedule/5
 		[HttpPost]
+		[Authorize]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Reschedule(int id, GymClassRescheduleViewModel model)
 		{
@@ -131,7 +136,8 @@ namespace PurrfectFit.Web.Controllers
 			}
 			return View(model);
 		}
-		// GET: GymClasses/Cancel/5
+		// GET: GymClasses/Cancel/5		
+		[Authorize]
 		public async Task<IActionResult> Cancel(int? id)
 		{
 			if (id == null) return NotFound();
@@ -144,6 +150,7 @@ namespace PurrfectFit.Web.Controllers
 
 		// POST: GymClasses/Cancel/5
 		[HttpPost, ActionName("Cancel")]
+		[Authorize]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> CancelConfirmed(int id)
 		{
