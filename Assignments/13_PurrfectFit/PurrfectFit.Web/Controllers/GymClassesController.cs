@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PurrfectFit.Core.Entities;
 using PurrfectFit.Persistence.Data;
@@ -9,16 +11,22 @@ namespace PurrfectFit.Web.Controllers
 	public class GymClassesController : Controller
 	{
 		private readonly ApplicationDbContext _context;
-				
-		public GymClassesController(ApplicationDbContext context)
+		private readonly UserManager<ApplicationUser> _userManager;
+
+		public GymClassesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
 		{
 			_context = context;
+			_userManager = userManager;
 		}
 
 		// GET: GymClasses
 		public async Task<IActionResult> Index()
-		{			
-			var gymClasses = await _context.GymClasses.ToListAsync();
+		{
+			var gymClasses = await _context.GymClasses
+				.Include(g => g.AttendingMembers)
+				.ThenInclude(am => am.ApplicationUser)
+				.ToListAsync();
+
 			return View(gymClasses);
 		}
 
@@ -29,8 +37,10 @@ namespace PurrfectFit.Web.Controllers
 			{
 				return NotFound();
 			}
-						
+			
 			var gymClass = await _context.GymClasses
+				.Include(g => g.AttendingMembers)
+				.ThenInclude(am => am.ApplicationUser)
 				.FirstOrDefaultAsync(m => m.Id == id);
 
 			if (gymClass == null)
@@ -43,7 +53,7 @@ namespace PurrfectFit.Web.Controllers
 
 		// GET: GymClasses/Schedule
 		public IActionResult Schedule()
-		{			
+		{
 			return View();
 		}
 
@@ -51,9 +61,9 @@ namespace PurrfectFit.Web.Controllers
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Schedule(GymClassScheduleViewModel model)
-		{			
+		{
 			if (ModelState.IsValid)
-			{				
+			{
 				var gymClass = new GymClass
 				{
 					Name = model.Name,
@@ -61,13 +71,13 @@ namespace PurrfectFit.Web.Controllers
 					Duration = model.Duration,
 					Description = model.Description
 				};
-								
+
 				_context.Add(gymClass);
 				await _context.SaveChangesAsync();
 
 				return RedirectToAction(nameof(Index));
 			}
-						
+
 			return View(model);
 		}
 		// GET: GymClasses/Edit/5
@@ -77,7 +87,7 @@ namespace PurrfectFit.Web.Controllers
 
 			var gymClass = await _context.GymClasses.FindAsync(id);
 			if (gymClass == null) return NotFound();
-						
+
 			var model = new GymClassRescheduleViewModel
 			{
 				Id = gymClass.Id,
@@ -103,7 +113,7 @@ namespace PurrfectFit.Web.Controllers
 				{
 					var gymClass = await _context.GymClasses.FindAsync(id);
 					if (gymClass == null) return NotFound();
-										
+
 					gymClass.Name = model.Name;
 					gymClass.StartTime = model.StartTime;
 					gymClass.Duration = model.Duration;
@@ -145,5 +155,57 @@ namespace PurrfectFit.Web.Controllers
 			}
 			return RedirectToAction(nameof(Index));
 		}
+
+		// POST: GymClasses/BookingStatus/5
+		[HttpPost]
+		[Authorize]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> BookingStatus(int id)
+		{
+			var gymClass = await _context.GymClasses.FindAsync(id);
+			if (gymClass == null)
+			{
+				return NotFound();
+			}
+
+			var userId = _userManager.GetUserId(User);
+			if (userId == null)
+			{
+				return Challenge();
+			}
+
+			var existingBooking = await _context.Set<ApplicationUserGymClass>()
+				.FirstOrDefaultAsync(ag => ag.ApplicationUserId == userId && ag.GymClassId == id);
+
+			if (existingBooking == null)
+			{
+				var newBooking = new ApplicationUserGymClass
+				{
+					ApplicationUserId = userId,
+					GymClassId = id
+				};
+				_context.Add(newBooking);
+			}
+			else
+				_context.Remove(existingBooking);
+
+			await _context.SaveChangesAsync();
+			return RedirectToAction(nameof(Index));
+		}
+		// GET: GymClasses/MyBookings
+		[Authorize]
+		public async Task<IActionResult> MyBookings()
+		{
+			var userId = _userManager.GetUserId(User);
+
+			var myClasses = await _context.GymClasses
+				.Include(g => g.AttendingMembers)
+					.ThenInclude(am => am.ApplicationUser)
+				.Where(g => g.AttendingMembers.Any(am => am.ApplicationUserId == userId))
+				.ToListAsync();
+
+			return View("Index", myClasses);
+		}
+
 	}
 }

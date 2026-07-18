@@ -23,6 +23,7 @@
                             <th>@Html.DisplayNameFor(model => model.Duration)</th>
                             <th>@Html.DisplayNameFor(model => model.EndTime)</th>
                             <th>@Html.DisplayNameFor(model => model.Description)</th>
+                            <th>Attendees</th>
                             <th class="text-center">Actions</th>
                         </tr>
                     </thead>
@@ -45,11 +46,47 @@
                                     <td>@item.Duration.TotalMinutes min</td>
                                     <td>@item.EndTime.ToString("yyyy-MM-dd HH:mm")</td>
                                     <td class="text-truncate" style="max-width: 250px;">@item.Description</td>
-                                    <td class="text-center">                                                                               
-                                        <div class="btn-group" role="group">
-                                            <a asp-action="Reschedule" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Reschedule</a>
-                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info text-white">Details</a>
-                                            <a asp-action="Cancel" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Cancel</a>
+                                    <td>
+                                        <span class="badge bg-info text-dark">
+                                            <i class="fas fa-users"></i> @item.AttendingMembers.Count cats
+                                        </span>
+                                    </td>
+
+                                    <td class="text-center">
+                                        <div class="d-flex justify-content-center align-items-center gap-2">
+                                                                                        
+                                            @if (User.Identity?.IsAuthenticated == true)
+                                            {                                                
+                                                var isBooked = item.AttendingMembers.Any(am => am.ApplicationUser?.UserName == User.Identity.Name);
+
+                                                <form asp-action="BookingStatus" asp-route-id="@item.Id" method="post" class="m-0">
+                                                    @if (isBooked)
+                                                    {
+                                                        <button type="submit" class="btn btn-sm btn-danger">
+                                                            <i class="fas fa-calendar-times"></i> Unbook
+                                                        </button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button type="submit" class="btn btn-sm btn-success">
+                                                            <i class="fas fa-calendar-check"></i> Book
+                                                        </button>
+                                                    }
+                                                </form>
+                                            }
+                                            else
+                                            {
+                                                <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-sm btn-secondary">
+                                                    <i class="fas fa-sign-in-alt"></i> Login to Book
+                                                </a>                                                    
+                                            }
+                                                                                        
+                                            <div class="btn-group" role="group">
+                                                <a asp-action="Reschedule" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Reschedule</a>
+                                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info text-white">Details</a>
+                                                <a asp-action="Cancel" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Cancel</a>
+                                            </div>
+
                                         </div>
                                     </td>
                                 </tr>
