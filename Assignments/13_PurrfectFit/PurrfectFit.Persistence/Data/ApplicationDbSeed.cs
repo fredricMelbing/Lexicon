@@ -31,7 +31,9 @@ namespace PurrfectFit.Persistence.Data
 				{
 					UserName = adminEmail,
 					Email = adminEmail,
-					EmailConfirmed = true					
+					EmailConfirmed = true,
+					FirstName = "Admin",
+					LastName = "Administrator"					
 				};
 								
 				var createAdminResult = await userManager.CreateAsync(newAdmin, "password");

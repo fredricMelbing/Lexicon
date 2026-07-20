@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PurrfectFit.Core.Entities;
 using PurrfectFit.Persistence.Data;
+using PurrfectFit.Persistence.Interceptors;
 
 namespace PurrfectFit.Web
 {
@@ -15,7 +16,8 @@ namespace PurrfectFit.Web
 				?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
 			builder.Services.AddDbContext<ApplicationDbContext>(options =>
-			options.UseSqlServer(connectionString));
+			options.UseSqlServer(connectionString)
+			.AddInterceptors(new UserAuditInterceptor()));
 
 
 			builder.Services.AddDefaultIdentity<ApplicationUser>(options =>

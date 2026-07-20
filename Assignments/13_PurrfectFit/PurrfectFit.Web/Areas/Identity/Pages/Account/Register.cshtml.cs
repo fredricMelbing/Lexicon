@@ -63,11 +63,21 @@ public class RegisterModel : PageModel
     /// </summary>
     public class InputModel
     {
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
-        [Required]
+		[Required]
+		[StringLength(50, MinimumLength = 2, ErrorMessage = "First name must be between {2} and {1} characters.")]
+		[Display(Name = "First Name")]
+		public string FirstName { get; set; } = string.Empty;
+
+		[Required]
+		[StringLength(50, MinimumLength = 2, ErrorMessage = "Last name must be between {2} and {1} characters.")]
+		[Display(Name = "Last Name")]
+		public string LastName { get; set; } = string.Empty;
+
+		/// <summary>
+		///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+		///     directly from your code. This API may change or be removed in future releases.
+		/// </summary>
+		[Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; } = default!;
@@ -107,7 +117,10 @@ public class RegisterModel : PageModel
         {
             var user = CreateUser();
 
-            await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+			user.FirstName = Input.FirstName;
+			user.LastName = Input.LastName;			
+
+			await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
             await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
             var result = await _userManager.CreateAsync(user, Input.Password);
 
