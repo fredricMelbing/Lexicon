@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PurrfectFit.Core.Entities;
 using PurrfectFit.Persistence.Data;
@@ -6,7 +7,7 @@ namespace PurrfectFit.Web
 {
 	public class Program
 	{
-		public static void Main(string[] args)
+		public static async Task Main(string[] args)
 		{
 			var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,7 @@ namespace PurrfectFit.Web
 				options.Password.RequireNonAlphanumeric = false;
 				options.Password.RequireUppercase = false;
 			})
+				.AddRoles<IdentityRole>()
 				.AddEntityFrameworkStores<ApplicationDbContext>();
 
 			// Add services to the container.
@@ -45,7 +47,7 @@ namespace PurrfectFit.Web
 			app.UseRouting();
 
 			app.UseAuthentication();
-			app.UseAuthorization();			
+			app.UseAuthorization();
 
 			app.MapStaticAssets();
 			app.MapControllerRoute(
@@ -54,6 +56,21 @@ namespace PurrfectFit.Web
 				.WithStaticAssets();
 
 			app.MapRazorPages();
+
+
+
+			using (var scope = app.Services.CreateScope())
+			{
+				var services = scope.ServiceProvider;
+				try
+				{					
+					await PurrfectFit.Persistence.Data.ApplicationDbSeed.SeedRolesAndAdminAsync(services);
+				}
+				catch (Exception ex)
+				{
+					throw new Exception("An error occurred while seeding the database.", ex);
+				}
+			}
 
 			app.Run();
 		}

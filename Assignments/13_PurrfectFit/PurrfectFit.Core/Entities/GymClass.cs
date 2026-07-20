@@ -8,7 +8,7 @@ namespace PurrfectFit.Core.Entities
 		public int Id { get; set; }
 
 		[Required]
-		[StringLength(100, MinimumLength = 2, ErrorMessage = "The name must be between {2} and {100} characters.")]
+		[StringLength(100, MinimumLength = 2, ErrorMessage = "The name must be between {2} and {1} characters.")]
 		public required string Name { get; set; }
 
 		[Required]

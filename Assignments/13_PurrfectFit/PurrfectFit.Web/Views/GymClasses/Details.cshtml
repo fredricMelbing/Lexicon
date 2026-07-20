@@ -33,9 +33,12 @@
                 <a asp-action="Index" class="btn btn-secondary">
                     <i class="fas fa-arrow-left"></i> Back to Schedule
                 </a>
-                <div class="btn-group">
-                    <a asp-action="Reschedule" asp-route-id="@Model.Id" class="btn btn-warning">Edit Class</a>
-                </div>
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="btn-group">
+                        <a asp-action="Reschedule" asp-route-id="@Model.Id" class="btn btn-warning">Edit Class</a>
+                        </div>
+                }
             </div>
         </div>
     </div>
