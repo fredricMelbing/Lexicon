@@ -22,12 +22,37 @@ namespace PurrfectFit.Web.Controllers
 		// GET: GymClasses
 		public async Task<IActionResult> Index()
 		{
+			ViewData["IsHistory"] = false;
+			ViewData["CurrentAction"] = "Index";
+
 			var gymClasses = await _context.GymClasses
 				.Include(g => g.AttendingMembers)
 				.ThenInclude(am => am.ApplicationUser)
-				.ToListAsync();
+				.Where(g => g.StartTime > DateTime.Now)
+				.OrderBy(g => g.StartTime)
+				.AsNoTracking()
+				.ToListAsync();					
 
 			return View(gymClasses);
+		}
+
+		// GET: GymClasses/History		
+		[HttpGet]
+		[Route("GymClasses/History")]
+		public async Task<IActionResult> History()
+		{
+			ViewData["IsHistory"] = true;
+			ViewData["CurrentAction"] = "History";
+
+			var gymClasses = await _context.GymClasses
+				.Include(g => g.AttendingMembers)
+				.ThenInclude(am => am.ApplicationUser)
+				.Where(g => g.StartTime <= DateTime.Now)
+				.OrderByDescending(g => g.StartTime)
+				.AsNoTracking()
+				.ToListAsync();
+
+			return View("Index", gymClasses);
 		}
 
 		// GET: GymClasses/Details/5
@@ -38,7 +63,7 @@ namespace PurrfectFit.Web.Controllers
 			{
 				return NotFound();
 			}
-			
+
 			var gymClass = await _context.GymClasses
 				.Include(g => g.AttendingMembers)
 				.ThenInclude(am => am.ApplicationUser)
@@ -199,20 +224,47 @@ namespace PurrfectFit.Web.Controllers
 			await _context.SaveChangesAsync();
 			return RedirectToAction(nameof(Index));
 		}
+
 		// GET: GymClasses/MyBookings
 		[Authorize]
 		public async Task<IActionResult> MyBookings()
 		{
+			ViewData["IsHistory"] = false;
+			ViewData["CurrentAction"] = "MyBookings";
+
 			var userId = _userManager.GetUserId(User);
 
 			var myClasses = await _context.GymClasses
 				.Include(g => g.AttendingMembers)
-					.ThenInclude(am => am.ApplicationUser)
-				.Where(g => g.AttendingMembers.Any(am => am.ApplicationUserId == userId))
+				.ThenInclude(am => am.ApplicationUser)
+				.Where(g => g.StartTime > DateTime.Now && g.AttendingMembers.Any(am => am.ApplicationUserId == userId))
+				.OrderBy(g => g.StartTime)
+				.AsNoTracking()
 				.ToListAsync();
 
 			return View("Index", myClasses);
 		}
 
+		// GET: GymClasses/MyBookings/History		
+		[HttpGet]
+		[Authorize]
+		[Route("GymClasses/MyBookings/History")]
+		public async Task<IActionResult> MyBookingsHistory()
+		{
+			ViewData["IsHistory"] = true;
+			ViewData["CurrentAction"] = "MyBookingsHistory";
+
+			var userId = _userManager.GetUserId(User);
+
+			var myClasses = await _context.GymClasses
+				.Include(g => g.AttendingMembers)
+				.ThenInclude(am => am.ApplicationUser)
+				.Where(g => g.StartTime <= DateTime.Now && g.AttendingMembers.Any(am => am.ApplicationUserId == userId))
+				.OrderByDescending(g => g.StartTime)
+				.AsNoTracking()
+				.ToListAsync();
+
+			return View("Index", myClasses);
+		}
 	}
 }
